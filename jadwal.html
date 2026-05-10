@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Les — BrightMind BrightFuture</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-header {
+      background: #4a148c; color: white;
+      padding: 28px 32px;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .page-header h1 { font-size: 1.3rem; font-weight: 800; }
+    .page-header p  { font-size: 0.82rem; opacity: 0.8; margin-top: 4px; }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-btn {
+      padding: 8px 18px; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+    }
+    .nav-btn.outline {
+      background: rgba(255,255,255,0.15); color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .nav-btn.outline:hover { background: rgba(255,255,255,0.25); }
+    .nav-btn.white { background: white; color: #4a148c; }
+    .nav-btn.white:hover { background: #f3e5f5; }
+
+    .content { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+
+    .hari-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .hari-tab {
+      padding: 8px 20px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; border: 1.5px solid #ddd;
+      background: white; color: #555;
+      transition: all 0.2s;
+    }
+    .hari-tab:hover { border-color: #7b1fa2; color: #7b1fa2; }
+    .hari-tab.active {
+      background: #7b1fa2; color: white; border-color: #7b1fa2;
+    }
+
+    .jadwal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .jadwal-card {
+      background: white; border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      overflow: hidden; transition: transform 0.2s;
+    }
+    .jadwal-card:hover { transform: translateY(-2px); }
+
+    .card-top {
+      background: #7b1fa2; color: white;
+      padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-top .waktu { font-size: 1rem; font-weight: 800; }
+    .card-top .jenis {
+      font-size: 0.72rem; font-weight: 700;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 8px; border-radius: 99px;
+    }
+
+    .card-body { padding: 14px 16px; }
+    .card-nama { font-size: 1rem; font-weight: 800; color: #333; margin-bottom: 8px; }
+    .card-info {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
+    }
+    .chip {
+      font-size: 0.75rem; font-weight: 600;
+      padding: 3px 10px; border-radius: 99px;
+      background: #f3e5f5; color: #6a1b9a;
+    }
+    .card-detail { font-size: 0.82rem; color: #666; margin-top: 6px; }
+
+    .empty-state {
+      text-align: center; padding: 48px 16px; color: #aaa;
+      background: white; border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+    .loading { text-align: center; padding: 32px; color: #aaa; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div>
+      <h1>📅 Jadwal Les</h1>
+      <p id="info-login">BrightMind BrightFuture — Jadwal Per Hari</p>
+    </div>
+    <div class="nav-links">
+      <a href="daftar-siswa.html" class="nav-btn outline">📋 Daftar Siswa</a>
+      <a href="index.html" class="nav-btn white">+ Daftar Baru</a>
+      <button class="nav-btn outline" onclick="logout()">Keluar 🚪</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="hari-tabs" id="hari-tabs">
+      <button class="hari-tab active" onclick="filterHari('Semua', this)">Semua</button>
+      <button class="hari-tab" onclick="filterHari('Senin', this)">Senin</button>
+      <button class="hari-tab" onclick="filterHari('Rabu', this)">Rabu</button>
+      <button class="hari-tab" onclick="filterHari('Kamis', this)">Kamis</button>
+      <button class="hari-tab" onclick="filterHari('Sabtu', this)">Sabtu</button>
+    </div>
+
+    <div class="loading" id="loading">⏳ Memuat jadwal...</div>
+    <div class="jadwal-grid" id="jadwal-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="icon">📭</div>
+      <p>Tidak ada jadwal untuk hari ini.</p>
+    </div>
+  </div>
+
+  <script>
+    // ── Cek login ──
+    const loginData = localStorage.getItem('siswa_login');
+    if (!loginData) {
+      window.location.href = 'login.html';
+    }
+    const siswa = JSON.parse(loginData || '{}');
+    document.getElementById('info-login').textContent = `👋 Halo, ${siswa.nama || siswa.username}!`;
+
+    let allJadwal = [];
+    let activeHari = 'Semua';
+
+    async function loadJadwal() {
+      try {
+        const res  = await fetch('/api/jadwal');
+        const json = await res.json();
+        // Hanya tampilkan jadwal milik siswa yang sedang login
+        allJadwal = (json.data || []).filter(j => j.id === siswa.id);
+        renderJadwal(allJadwal);
+      } catch (e) {
+        document.getElementById('loading').textContent = '❌ Gagal memuat jadwal.';
+      }
+    }
+
+    function filterHari(hari, btn) {
+      activeHari = hari;
+      document.querySelectorAll('.hari-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filtered = hari === 'Semua'
+        ? allJadwal
+        : allJadwal.filter(j => {
+            const hariArr = Array.isArray(j.hari) ? j.hari : [j.hari];
+            return hariArr.includes(hari);
+          });
+      renderJadwal(filtered);
+    }
+
+    function renderJadwal(data) {
+      document.getElementById('loading').style.display = 'none';
+      const grid = document.getElementById('jadwal-grid');
+      grid.innerHTML = '';
+
+      if (data.length === 0) {
+        document.getElementById('empty-state').style.display = 'block';
+        return;
+      }
+      document.getElementById('empty-state').style.display = 'none';
+
+      data.forEach(j => {
+        const mapelArr = Array.isArray(j.mapel) ? j.mapel : [j.mapel];
+        const hariArr  = Array.isArray(j.hari)  ? j.hari  : [j.hari];
+        const chips    = mapelArr.map(m => `<span class="chip">${m}</span>`).join('');
+        const hariChips = hariArr.map(h => `<span class="chip" style="background:#e8eaf6;color:#283593">${h}</span>`).join('');
+
+        grid.innerHTML += `
+          <div class="jadwal-card">
+            <div class="card-top">
+              <span class="waktu">🕐 ${j.waktu || '-'}</span>
+              <span class="jenis">${j.jenis || '-'}</span>
+            </div>
+            <div class="card-body">
+              <div class="card-nama">${j.nama || '-'}</div>
+              <div class="card-info">${chips}</div>
+              <div class="card-info">${hariChips}</div>
+              <div class="card-detail">📚 ${j.jenjang || '-'} · ${j.kelas || '-'}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    loadJadwal();
+
+    function logout() {
+      localStorage.removeItem('siswa_login');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

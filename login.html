@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Siswa — BrightMind BrightFuture</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #4a148c;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    .login-header {
+      background: #7b1fa2;
+      padding: 32px;
+      text-align: center;
+      color: white;
+    }
+
+    .login-header .logo {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .login-header h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .login-header p {
+      font-size: 0.82rem;
+      opacity: 0.85;
+    }
+
+    .login-body {
+      padding: 32px;
+    }
+
+    .login-body .field {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .login-body label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .login-body input {
+      padding: 11px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .login-body input:focus { border-color: #7b1fa2; }
+    .login-body input.error { border-color: #e53935; }
+
+    .hint-username {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: #7b1fa2;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-login:hover { background: #4a148c; }
+    .btn-login:disabled { background: #ccc; cursor: not-allowed; }
+
+    .error-alert {
+      display: none;
+      background: #ffebee;
+      color: #c62828;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .error-alert.show { display: block; }
+
+    .login-footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 0.78rem;
+      color: #999;
+      border-top: 1px solid #eee;
+    }
+
+    .login-footer a {
+      color: #7b1fa2;
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <div class="login-header">
+      <div class="logo">🎓</div>
+      <h1>BrightMind BrightFuture</h1>
+      <p>Login untuk melihat jadwal lesmu</p>
+    </div>
+
+    <div class="login-body">
+      <div class="error-alert" id="error-alert">❌ Username atau password salah!</div>
+
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="contoh: johndoe_2005-03-10" autocomplete="username" />
+        <span class="hint-username">💡 Format: namalengkap_tanggallahir (tanpa spasi, huruf kecil)</span>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Masukkan password" autocomplete="current-password" />
+      </div>
+
+      <button class="btn-login" id="btn-login" onclick="doLogin()">Masuk →</button>
+    </div>
+
+    <div class="login-footer">
+      Belum punya akun? <a href="index.html">Daftar di sini</a>
+    </div>
+  </div>
+
+  <script>
+    // Jika sudah login, langsung ke jadwal
+    if (localStorage.getItem('siswa_login')) {
+      window.location.href = 'jadwal.html';
+    }
+
+    async function doLogin() {
+      const username = document.getElementById('username').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('btn-login');
+      const errAlert = document.getElementById('error-alert');
+
+      if (!username || !password) {
+        errAlert.textContent = '❌ Username dan password wajib diisi!';
+        errAlert.classList.add('show');
+        return;
+      }
+
+      btn.textContent = 'Memverifikasi...';
+      btn.disabled = true;
+      errAlert.classList.remove('show');
+
+      try {
+        const res  = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const json = await res.json();
+
+        if (json.success) {
+          localStorage.setItem('siswa_login', JSON.stringify(json.siswa));
+          window.location.href = 'jadwal.html';
+        } else {
+          errAlert.textContent = '❌ ' + json.message;
+          errAlert.classList.add('show');
+        }
+      } catch (e) {
+        errAlert.textContent = '❌ Koneksi ke server gagal.';
+        errAlert.classList.add('show');
+      } finally {
+        btn.textContent = 'Masuk →';
+        btn.disabled = false;
+      }
+    }
+
+    // Enter untuk login
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+  </script>
+</body>
+</html>

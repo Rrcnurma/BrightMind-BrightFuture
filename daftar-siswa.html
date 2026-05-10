@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daftar Siswa — BrightMind BrightFuture</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-header {
+      background: #4a148c;
+      color: white;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-header h1 { font-size: 1.3rem; font-weight: 800; }
+    .page-header p  { font-size: 0.82rem; opacity: 0.8; margin-top: 4px; }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-btn.outline {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .nav-btn.outline:hover { background: rgba(255,255,255,0.25); }
+    .nav-btn.white { background: white; color: #4a148c; }
+    .nav-btn.white:hover { background: #f3e5f5; }
+
+    .content { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+
+    .stats-row {
+      display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .stat-card {
+      background: white; border-radius: 10px;
+      padding: 16px 24px; flex: 1; min-width: 140px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      text-align: center;
+    }
+    .stat-card .num { font-size: 1.8rem; font-weight: 800; color: #7b1fa2; }
+    .stat-card .lbl { font-size: 0.78rem; color: #888; margin-top: 2px; }
+
+    .search-bar {
+      background: white; border-radius: 10px; padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 20px;
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .search-bar input, .search-bar select {
+      padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px;
+      font-size: 0.88rem; font-family: inherit; flex: 1; min-width: 160px;
+      outline: none;
+    }
+    .search-bar input:focus, .search-bar select:focus { border-color: #7b1fa2; }
+
+    .table-wrap {
+      background: white; border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: #f3e5f5; color: #4a148c;
+      font-size: 0.78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 12px 16px; text-align: left;
+    }
+    td { padding: 12px 16px; font-size: 0.88rem; border-bottom: 1px solid #f0f0f0; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #faf5ff; }
+
+    .badge-status {
+      display: inline-block; padding: 3px 10px; border-radius: 99px;
+      font-size: 0.72rem; font-weight: 700;
+    }
+    .badge-status.menunggu { background: #fff3e0; color: #e65100; }
+    .badge-status.aktif    { background: #e8f5e9; color: #2e7d32; }
+
+    .foto-thumb {
+      width: 40px; height: 40px; border-radius: 50%;
+      object-fit: cover; border: 2px solid #ce93d8;
+    }
+    .no-foto {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #f3e5f5; display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem;
+    }
+
+    .aksi-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .btn-konfirmasi {
+      padding: 5px 12px; background: #e8f5e9; color: #2e7d32;
+      border: none; border-radius: 6px; font-size: 0.78rem;
+      font-weight: 700; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-konfirmasi:hover { background: #c8e6c9; }
+    .btn-konfirmasi:disabled {
+      background: #f0f0f0; color: #aaa; cursor: not-allowed;
+    }
+
+    .btn-hapus {
+      padding: 5px 12px; background: #ffebee; color: #c62828;
+      border: none; border-radius: 6px; font-size: 0.78rem;
+      font-weight: 700; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-hapus:hover { background: #ffcdd2; }
+
+    .empty-state {
+      text-align: center; padding: 48px 16px; color: #aaa;
+    }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .empty-state p { font-size: 0.9rem; }
+
+    .loading { text-align: center; padding: 32px; color: #aaa; }
+
+    /* Confirm Delete Modal */
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 999;
+      justify-content: center; align-items: center;
+    }
+    .confirm-overlay.show { display: flex; }
+    .confirm-box {
+      background: white; border-radius: 12px; padding: 32px;
+      max-width: 360px; width: 90%; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .confirm-box h3 { font-size: 1.1rem; color: #c62828; margin-bottom: 10px; }
+    .confirm-box p  { font-size: 0.88rem; color: #555; margin-bottom: 24px; }
+    .confirm-btns   { display: flex; gap: 10px; justify-content: center; }
+    .btn-cancel {
+      padding: 9px 24px; border: 1.5px solid #ddd; border-radius: 8px;
+      background: white; font-family: inherit; font-size: 0.88rem;
+      font-weight: 600; cursor: pointer;
+    }
+    .btn-confirm-del {
+      padding: 9px 24px; background: #c62828; color: white;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer;
+    }
+    .btn-confirm-del:hover { background: #b71c1c; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div>
+      <h1>📋 Daftar Siswa Terdaftar</h1>
+      <p>BrightMind BrightFuture — Manajemen Pendaftaran</p>
+    </div>
+    <div class="nav-links">
+      <a href="jadwal.html" class="nav-btn outline">📅 Jadwal</a>
+      <a href="index.html" class="nav-btn white">+ Daftar Baru</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="num" id="total-siswa">—</div>
+        <div class="lbl">Total Siswa</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="total-sd">—</div>
+        <div class="lbl">Siswa SD</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="total-smp">—</div>
+        <div class="lbl">Siswa SMP</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="total-sma">—</div>
+        <div class="lbl">Siswa SMA</div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="search-nama" placeholder="🔍 Cari nama siswa..." oninput="filterTable()" />
+      <select id="filter-jenjang" onchange="filterTable()">
+        <option value="">Semua Jenjang</option>
+        <option>SD</option><option>SMP</option><option>SMA</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading" id="loading">⏳ Memuat data...</div>
+      <table id="tabel-siswa" style="display:none">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Nama Siswa</th>
+            <th>Jenjang</th>
+            <th>Kelas</th>
+            <th>Sekolah</th>
+            <th>Mata Pelajaran</th>
+            <th>Kontak Ortu</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty-state" id="empty-state" style="display:none">
+        <div class="icon">📭</div>
+        <p>Belum ada siswa yang terdaftar.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div class="confirm-overlay" id="confirm-modal">
+    <div class="confirm-box">
+      <h3>🗑️ Hapus Data?</h3>
+      <p>Data siswa ini akan dihapus permanen dan tidak dapat dikembalikan.</p>
+      <div class="confirm-btns">
+        <button class="btn-cancel" onclick="tutupConfirm()">Batal</button>
+        <button class="btn-confirm-del" onclick="konfirmasiHapus()">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allData = [];
+    let hapusId = null;
+
+    async function loadSiswa() {
+      try {
+        const res = await fetch('/api/siswa');
+        const json = await res.json();
+        allData = json.data || [];
+        renderTable(allData);
+        updateStats(allData);
+      } catch (e) {
+        document.getElementById('loading').textContent = '❌ Gagal memuat data. Pastikan server berjalan.';
+      }
+    }
+
+    function updateStats(data) {
+      document.getElementById('total-siswa').textContent = data.length;
+      document.getElementById('total-sd').textContent  = data.filter(d => d.jenjang === 'SD').length;
+      document.getElementById('total-smp').textContent = data.filter(d => d.jenjang === 'SMP').length;
+      document.getElementById('total-sma').textContent = data.filter(d => d.jenjang === 'SMA' || d.jenjang === 'SMA / SMK').length;
+    }
+
+    function renderTable(data) {
+      document.getElementById('loading').style.display = 'none';
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        document.getElementById('tabel-siswa').style.display = 'none';
+        document.getElementById('empty-state').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('tabel-siswa').style.display = 'table';
+      document.getElementById('empty-state').style.display = 'none';
+
+      data.forEach(s => {
+        const mapelList = Array.isArray(s.mapel) ? s.mapel.join(', ') : s.mapel;
+        const fotoEl = s.foto_url
+          ? `<img src="${s.foto_url}" class="foto-thumb" alt="foto" onerror="this.outerHTML='<div class=no-foto>👤</div>'" />`
+          : `<div class="no-foto">👤</div>`;
+
+        const sudahAktif = s.status === 'Aktif';
+        const statusClass = sudahAktif ? 'aktif' : 'menunggu';
+        const statusLabel = sudahAktif ? '✅ Aktif' : 'Menunggu Konfirmasi';
+        const tgl = s.tanggal_daftar ? new Date(s.tanggal_daftar).toLocaleDateString('id-ID') : '-';
+
+        tbody.innerHTML += `
+          <tr data-jenjang="${s.jenjang}" data-nama="${(s.nama_siswa||'').toLowerCase()}">
+            <td>${fotoEl}</td>
+            <td>
+              <strong>${s.nama_siswa || '-'}</strong>
+              <div style="font-size:0.75rem;color:#999;margin-top:2px">${tgl}</div>
+            </td>
+            <td>${s.jenjang || '-'}</td>
+            <td>${s.kelas || '-'}</td>
+            <td style="font-size:0.82rem">${s.nama_sekolah || '-'}</td>
+            <td style="font-size:0.82rem">${mapelList || '-'}</td>
+            <td style="font-size:0.82rem">
+              <div>${s.nama_ortu || '-'}</div>
+              <div style="color:#888">${s.no_hp || '-'}</div>
+            </td>
+            <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+            <td>
+              <div class="aksi-btns">
+                <button class="btn-konfirmasi" onclick="konfirmasiSiswa('${s.id}', this)" ${sudahAktif ? 'disabled' : ''}>
+                  ${sudahAktif ? '✅ Terkonfirmasi' : '✔ Konfirmasi'}
+                </button>
+                <button class="btn-hapus" onclick="bukaConfirm('${s.id}')">🗑️ Hapus</button>
+              </div>
+            </td>
+          </tr>`;
+      });
+    }
+
+    function filterTable() {
+      const nama    = document.getElementById('search-nama').value.toLowerCase();
+      const jenjang = document.getElementById('filter-jenjang').value;
+      const filtered = allData.filter(s => {
+        const matchNama    = (s.nama_siswa || '').toLowerCase().includes(nama);
+        const matchJenjang = !jenjang || s.jenjang === jenjang;
+        return matchNama && matchJenjang;
+      });
+      renderTable(filtered);
+    }
+
+    async function konfirmasiSiswa(id, btn) {
+      btn.disabled = true;
+      btn.textContent = '⏳...';
+      try {
+        const res = await fetch(`/api/siswa/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'Aktif' })
+        });
+        const json = await res.json();
+        if (json.success) {
+          loadSiswa();
+        } else {
+          alert('Gagal mengkonfirmasi: ' + json.message);
+          btn.disabled = false;
+          btn.textContent = '✔ Konfirmasi';
+        }
+      } catch (e) {
+        alert('Gagal mengkonfirmasi siswa.');
+        btn.disabled = false;
+        btn.textContent = '✔ Konfirmasi';
+      }
+    }
+
+    function bukaConfirm(id) {
+      hapusId = id;
+      document.getElementById('confirm-modal').classList.add('show');
+    }
+
+    function tutupConfirm() {
+      hapusId = null;
+      document.getElementById('confirm-modal').classList.remove('show');
+    }
+
+    async function konfirmasiHapus() {
+      if (!hapusId) return;
+      try {
+        await fetch(`/api/siswa/${hapusId}`, { method: 'DELETE' });
+        tutupConfirm();
+        loadSiswa();
+      } catch (e) {
+        alert('Gagal menghapus data.');
+      }
+    }
+
+    loadSiswa();
+  </script>
+</body>
+</html>

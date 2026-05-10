@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendaftaran Les Privat — BrightMind BrightFuture</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { margin: 0 !important; padding: 0 !important; }
+
+    /* Animasi */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-14px); }
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes badgePop {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0 64px;
+      background: linear-gradient(135deg, #1a0338, #2d0a5e, #6a1b9a, #ad1457, #c2185b);
+      background-size: 300% 300%;
+      animation: gradientShift 8s ease infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dekorasi lingkaran blur */
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(244,143,177,0.12);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(106,27,154,0.18);
+      filter: blur(50px);
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    .hero-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      padding-bottom: 0;
+      width: 100%;
+      animation: fadeIn 0.6s ease both;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-nav .logo {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: white;
+      white-space: nowrap;
+    }
+    .hero-nav .logo span { color: #f48fb1; }
+
+    .hero-nav .nav-right {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .hero-nav .nav-right a.nav-link {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.88rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .hero-nav .nav-right a.nav-link:hover { opacity: 0.6; }
+
+    .hero-nav .nav-right a.btn-login {
+      color: #2d0a5e;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      background: white;
+      padding: 8px 22px;
+      border-radius: 20px;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .hero-nav .nav-right a.btn-login:hover {
+      background: #f3e5f5;
+      transform: translateY(-1px);
+    }
+
+    /* Hero Body */
+    .hero-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 40px 0 60px;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Teks kiri */
+    .hero-text {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 99px;
+      color: white;
+      margin-bottom: 22px;
+      animation: badgePop 0.5s ease 0.2s both;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(1.8rem, 3.8vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.25;
+      color: white;
+      margin-bottom: 18px;
+      animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    .hero-text h1 span { color: #f48fb1; }
+
+    .hero-text .tagline {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.75;
+      max-width: 420px;
+      margin-bottom: 36px;
+      animation: fadeUp 0.6s ease 0.45s both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      color: #2d0a5e;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 13px 30px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 0.6s ease 0.6s both;
+      text-decoration: none;
+    }
+    .hero-cta:hover {
+      background: #f3e5f5;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Gambar kanan */
+    .hero-image {
+      flex: 0 0 auto;
+      width: min(42%, 480px);
+      animation: fadeIn 0.8s ease 0.4s both;
+    }
+
+    .hero-image img {
+      width: 100%;
+      border-radius: 24px;
+      display: block;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @media (max-width: 720px) {
+      .hero-section { padding: 0 24px; }
+      .hero-body { flex-direction: column; padding: 32px 0 48px; text-align: center; }
+      .hero-image { width: 100%; }
+      .hero-text .tagline { max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body style="margin:0; padding:0;">
+  <!-- NAVBAR + HERO -->
+  <section class="hero-section">
+
+    <!-- Navbar -->
+    <nav class="hero-nav">
+      <div class="logo">BrightMind <span>BrightFuture</span></div>
+      <div class="nav-right">
+        <a href="tentang.html" class="nav-link">Tentang Kami</a>
+        <a href="login.html" class="btn-login">Login</a>
+      </div>
+    </nav>
+
+    <!-- Hero Body -->
+    <div class="hero-body">
+
+      <!-- Teks kiri -->
+      <div class="hero-text">
+        <div class="hero-badge">⭐ Les Privat Terpercaya No. 1</div>
+        <h1>Bimbingan belajar privat<br>untuk <span>hasil yang nyata</span></h1>
+        <p class="tagline">Tutor bersertifikat, jadwal fleksibel, untuk siswa SD, SMP, dan SMA di Semarang.</p>
+        <a class="hero-cta" onclick="scrollToForm()" href="#">Daftar gratis &rarr;</a>
+      </div>
+
+      <!-- Gambar kanan -->
+      <div class="hero-image">
+        <img src="gambar.jpg" alt="Ilustrasi guru les privat" />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- KENAPA PILIH KAMI -->
+  <section style="padding:40px 48px; background:#f9f4ff;">
+    <p style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#7b1fa2; margin-bottom:20px;">Kenapa pilih kami</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:14px;">
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:16px; background:#EEEDFE; border-radius:12px;">
+        <span style="font-size:1.4rem;">📚</span>
+        <div>
+          <div style="font-size:0.88rem; font-weight:700; color:#3C3489; margin-bottom:4px;">Semua mata pelajaran</div>
+          <div style="font-size:0.8rem; color:#534AB7; line-height:1.5;">Matematika, IPA, Bahasa Inggris, dan lainnya</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:16px; background:#E1F5EE; border-radius:12px;">
+        <span style="font-size:1.4rem;">🏠</span>
+        <div>
+          <div style="font-size:0.88rem; font-weight:700; color:#085041; margin-bottom:4px;">Online & offline</div>
+          <div style="font-size:0.8rem; color:#0F6E56; line-height:1.5;">Fleksibel sesuai kebutuhan dan lokasi siswa</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:16px; background:#E6F1FB; border-radius:12px;">
+        <span style="font-size:1.4rem;">👨‍🏫</span>
+        <div>
+          <div style="font-size:0.88rem; font-weight:700; color:#0C447C; margin-bottom:4px;">Tutor bersertifikat</div>
+          <div style="font-size:0.8rem; color:#185FA5; line-height:1.5;">Lulus seleksi ketat dan terlatih profesional</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:14px; align-items:flex-start; padding:16px; background:#FAEEDA; border-radius:12px;">
+        <span style="font-size:1.4rem;">📈</span>
+        <div>
+          <div style="font-size:0.88rem; font-weight:700; color:#633806; margin-bottom:4px;">Laporan perkembangan</div>
+          <div style="font-size:0.8rem; color:#854F0B; line-height:1.5;">Orang tua dapat laporan rutin tiap bulan</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!FORM PENDAFTARAN-->
+  <section class="form-section" id="form-section">
+    <div class="container">
+
+      <div class="header">
+        <h2>📝 Formulir Pendaftaran Les Privat</h2>
+        <p>Pendaftaran Les Privat BrightMind BrightFuture — SD · SMP · SMA</p>
+      </div>
+
+      <form id="reg-form" action="#" method="post" novalidate>
+
+        <!-- DATA SISWA -->
+        <p class="section">Data Siswa</p>
+
+        <div class="field">
+          <label for="nama">Nama Lengkap <span class="req">*</span></label>
+          <input type="text" id="nama" name="nama_siswa" placeholder="Nama lengkap siswa" />
+          <span class="error-msg" id="err-nama">Nama lengkap wajib diisi.</span>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="tempat-lahir">Tempat Lahir</label>
+            <input type="text" id="tempat-lahir" name="tempat_lahir" placeholder="Kota lahir" />
+          </div>
+          <div class="field">
+            <label for="tgl-lahir">Tanggal Lahir <span class="req">*</span></label>
+            <input type="date" id="tgl-lahir" name="tanggal_lahir" />
+            <span class="error-msg" id="err-tgl">Tanggal lahir wajib diisi.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Jenis Kelamin <span class="req">*</span></label>
+          <div class="options" id="opt-gender">
+            <label><input type="radio" name="jenis_kelamin" value="Laki-laki" /> Laki-laki</label>
+            <label><input type="radio" name="jenis_kelamin" value="Perempuan" /> Perempuan</label>
+          </div>
+          <span class="error-msg" id="err-gender">Jenis kelamin wajib dipilih.</span>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="jenjang">Jenjang <span class="req">*</span></label>
+            <select id="jenjang" name="jenjang" onchange="updateKelas()">
+              <option value="">— Pilih —</option>
+              <option value="SD">SD</option>
+              <option value="SMP">SMP</option>
+              <option value="SMA">SMA / SMK</option>
+            </select>
+            <span class="error-msg" id="err-jenjang">Jenjang wajib dipilih.</span>
+          </div>
+          <div class="field">
+            <label for="kelas">Kelas <span class="req">*</span></label>
+            <select id="kelas" name="kelas">
+              <option value="">— Pilih Jenjang Dulu —</option>
+            </select>
+            <span class="error-msg" id="err-kelas">Kelas wajib dipilih.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sekolah">Asal Sekolah <span class="req">*</span></label>
+          <input type="text" id="sekolah" name="nama_sekolah" placeholder="Contoh: SMPN 1 Ungaran" />
+          <span class="error-msg" id="err-sekolah">Nama sekolah wajib diisi.</span>
+        </div>
+
+        <div class="field">
+          <label for="foto">Foto Siswa</label>
+          <input type="file" id="foto" name="foto_siswa" accept="image/*" onchange="validateFoto()" />
+          <span class="error-msg" id="err-foto">File harus berupa gambar (JPG/PNG) dan maksimal 2 MB.</span>
+        </div>
+
+        <!-- DATA ORANG TUA -->
+        <p class="section">Data Orang Tua / Wali</p>
+
+        <div class="field">
+          <label for="nama-ortu">Nama Orang Tua / Wali <span class="req">*</span></label>
+          <input type="text" id="nama-ortu" name="nama_ortu" placeholder="Nama lengkap" />
+          <span class="error-msg" id="err-ortu">Nama orang tua / wali wajib diisi.</span>
+        </div>
+
+        <div class="field">
+          <label>Hubungan dengan Siswa <span class="req">*</span></label>
+          <div class="options" id="opt-hubungan">
+            <label><input type="radio" name="hubungan" value="Ayah" /> Ayah</label>
+            <label><input type="radio" name="hubungan" value="Ibu" /> Ibu</label>
+            <label><input type="radio" name="hubungan" value="Wali" /> Wali</label>
+          </div>
+          <span class="error-msg" id="err-hubungan">Hubungan wajib dipilih.</span>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="no-hp">No. HP / WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="no-hp" name="no_hp" placeholder="08xxxxxxxxxx" />
+            <span class="error-msg" id="err-hp">Nomor HP wajib diisi (minimal 10 digit angka).</span>
+          </div>
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="nama@email.com" />
+            <span class="error-msg" id="err-email">Format email tidak valid.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="alamat">Alamat Rumah <span class="req">*</span></label>
+          <textarea id="alamat" name="alamat" placeholder="Jalan, No. Rumah, Kelurahan, Kecamatan, Kota"></textarea>
+          <span class="error-msg" id="err-alamat">Alamat rumah wajib diisi.</span>
+        </div>
+
+        <!-- PREFERENSI LES -->
+        <p class="section">Preferensi Les</p>
+
+        <div class="field">
+          <label>Mata Pelajaran <span class="req">*</span></label>
+          <div class="options" id="opt-mapel">
+            <label><input type="checkbox" name="mapel" value="Matematika" /> Matematika</label>
+            <label><input type="checkbox" name="mapel" value="Bahasa Inggris" /> Bahasa Inggris</label>
+            <label><input type="checkbox" name="mapel" value="IPA" /> IPA</label>
+            <label><input type="checkbox" name="mapel" value="IPS" /> IPS</label>
+            <label><input type="checkbox" name="mapel" value="Fisika" /> Fisika</label>
+            <label><input type="checkbox" name="mapel" value="Kimia" /> Kimia</label>
+            <label><input type="checkbox" name="mapel" value="Biologi" /> Biologi</label>
+          </div>
+          <span class="error-msg" id="err-mapel">Pilih minimal satu mata pelajaran.</span>
+        </div>
+
+        <div class="field">
+          <label>Hari Tersedia <span class="req">*</span></label>
+          <div class="options" id="opt-hari">
+            <label><input type="checkbox" name="hari" value="Senin" /> Senin</label>
+            <label><input type="checkbox" name="hari" value="Rabu" /> Rabu</label>
+            <label><input type="checkbox" name="hari" value="Kamis" /> Kamis</label>
+            <label><input type="checkbox" name="hari" value="Sabtu" /> Sabtu</label>
+          </div>
+          <span class="error-msg" id="err-hari">Pilih minimal satu hari.</span>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="waktu">Waktu Mulai <span class="req">*</span></label>
+            <select id="waktu" name="waktu_mulai">
+              <option value="">— Pilih —</option>
+              <option>08.00 WIB</option>
+              <option>09.00 WIB</option>
+              <option>13.00 WIB</option>
+              <option>14.30 WIB</option>
+              <option>16.00 WIB</option>
+              <option>18.30 WIB</option>
+            </select>
+            <span class="error-msg" id="err-waktu">Waktu mulai wajib dipilih.</span>
+          </div>
+          <div class="field">
+            <label for="jenis-les">Jenis Les <span class="req">*</span></label>
+            <select id="jenis-les" name="jenis_les">
+              <option value="">— Pilih —</option>
+              <option>Offline — Rumah Siswa</option>
+              <option>Offline — Rumah Tutor</option>
+              <option>Online</option>
+              <option>Hybrid</option>
+            </select>
+            <span class="error-msg" id="err-jenis">Jenis les wajib dipilih.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="durasi">Durasi per Pertemuan</label>
+          <div class="range-row">
+            <input type="range" id="durasi" name="durasi" min="1" max="4" step="1" value="2"
+              oninput="document.getElementById('durasi-val').textContent = this.value + ' jam'" />
+            <span class="range-val" id="durasi-val">2 jam</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="catatan">Catatan Tambahan</label>
+          <textarea id="catatan" name="catatan" placeholder="Kesulitan yang dihadapi, target nilai, atau hal lain yang perlu diketahui tutor..."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="info-dari">Mengetahui dari</label>
+          <select id="info-dari" name="info_dari">
+            <option value="">— Pilih —</option>
+            <option>Media Sosial</option>
+            <option>Rekomendasi Teman / Keluarga</option>
+            <option>Google</option>
+            <option>Brosur / Poster</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+
+        <div class="section">🔐 Akun Login Siswa</div>
+        <p style="font-size:0.82rem;color:#666;margin-bottom:14px;line-height:1.6">
+          Setelah mendaftar, kamu akan mendapat akun untuk login dan melihat jadwal les.
+          <br><strong>Username otomatis:</strong> nama siswa + tanggal lahir (contoh: <em>johndoe_2005-03-10</em>)
+        </p>
+        <div class="row">
+          <div class="field">
+            <label for="password">Password <span class="req">*</span></label>
+            <input type="password" id="password" name="password" placeholder="Buat password (min. 6 karakter)" />
+            <span class="error-msg" id="err-password">Password minimal 6 karakter</span>
+          </div>
+          <div class="field">
+            <label for="konfirmasi-password">Konfirmasi Password <span class="req">*</span></label>
+            <input type="password" id="konfirmasi-password" name="konfirmasi_password" placeholder="Ulangi password" />
+            <span class="error-msg" id="err-konfirmasi">Password tidak cocok</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Kirim Pendaftaran</button>
+
+      </form>
+
+      <div class="form-footer">
+        &copy; 2026 BrightMind BrightFuture &nbsp;·&nbsp; Hubungi kami: 0851-3452-9227
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MODAL SUKSES -->
+  <div class="modal-overlay" id="modal-sukses">
+    <div class="modal-box">
+      <div class="modal-icon">🎉</div>
+      <h3>Pendaftaran Berhasil!</h3>
+      <p>Terima kasih telah mendaftar di <strong>BrightMind BrightFuture</strong>.<br>Tim kami akan menghubungi Anda dalam <strong>1×24 jam</strong>.</p>
+      <div id="info-akun" style="background:#f3e5f5;border-radius:8px;padding:12px 16px;margin:12px 0;text-align:left;font-size:0.85rem">
+        <div style="font-weight:700;color:#4a148c;margin-bottom:6px">🔐 Info Akun Login Kamu:</div>
+        <div>👤 Username: <strong id="tampil-username">-</strong></div>
+        <div style="margin-top:4px">🔑 Password: yang kamu buat tadi</div>
+        <div style="margin-top:8px;font-size:0.78rem;color:#888">Simpan info ini baik-baik ya!</div>
+      </div>
+      <a href="login.html" class="modal-btn" style="display:inline-block;text-decoration:none;margin-top:4px">Login Sekarang →</a>
+      <button class="modal-btn" onclick="tutupModal()" style="background:#ccc;color:#333;margin-left:8px">Nanti Saja</button>
+    </div>
+  </div>
+
+  <script>
+    /* ── Scroll ke form ── */
+    function scrollToForm() {
+      document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ── Update pilihan kelas berdasarkan jenjang ── */
+    function updateKelas() {
+      const jenjang = document.getElementById('jenjang').value;
+      const kelas   = document.getElementById('kelas');
+      kelas.innerHTML = '<option value="">— Pilih Kelas —</option>';
+      const map = { SD: [1,2,3,4,5,6], SMP: [7,8,9], SMA: [10,11,12] };
+      (map[jenjang] || []).forEach(k => {
+        const o = document.createElement('option');
+        o.value = o.textContent = 'Kelas ' + k;
+        kelas.appendChild(o);
+      });
+      clearError('jenjang', 'err-jenjang');
+    }
+
+    /* ── Validasi file foto ── */
+    function validateFoto() {
+      const file = document.getElementById('foto').files[0];
+      if (!file) return true;
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const maxSize    = 2 * 1024 * 1024;
+      if (!validTypes.includes(file.type) || file.size > maxSize) {
+        showError('foto', 'err-foto');
+        return false;
+      }
+      clearError('foto', 'err-foto');
+      return true;
+    }
+
+    /* ── Helper: tampilkan & sembunyikan error ── */
+    function showError(inputId, errId) {
+      const el = document.getElementById(inputId);
+      if (el) el.classList.add('error');
+      document.getElementById(errId).classList.add('show');
+    }
+
+    function clearError(inputId, errId) {
+      const el = document.getElementById(inputId);
+      if (el) el.classList.remove('error');
+      document.getElementById(errId).classList.remove('show');
+    }
+
+    /* ── Bersihkan error saat user mulai mengetik / memilih ── */
+    ['nama','tgl-lahir','sekolah','nama-ortu','no-hp','email','alamat','jenjang','kelas','waktu','jenis-les'].forEach(id => {
+      const errMap = {
+        'nama': 'err-nama', 'tgl-lahir': 'err-tgl', 'sekolah': 'err-sekolah',
+        'nama-ortu': 'err-ortu', 'no-hp': 'err-hp', 'email': 'err-email',
+        'alamat': 'err-alamat', 'jenjang': 'err-jenjang', 'kelas': 'err-kelas',
+        'waktu': 'err-waktu', 'jenis-les': 'err-jenis'
+      };
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => clearError(id, errMap[id]));
+      if (el) el.addEventListener('change', () => clearError(id, errMap[id]));
+    });
+
+    /* ── Validasi utama saat submit ── */
+    document.getElementById('reg-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      let valid = true;
+
+      /* Teks wajib */
+      const required = [
+        { id: 'nama',      err: 'err-nama',    msg: null },
+        { id: 'tgl-lahir', err: 'err-tgl',     msg: null },
+        { id: 'sekolah',   err: 'err-sekolah', msg: null },
+        { id: 'nama-ortu', err: 'err-ortu',    msg: null },
+        { id: 'alamat',    err: 'err-alamat',  msg: null },
+      ];
+      required.forEach(({ id, err }) => {
+        const val = document.getElementById(id).value.trim();
+        if (!val) { showError(id, err); valid = false; }
+        else       clearError(id, err);
+      });
+
+      /* Select wajib */
+      ['jenjang','kelas','waktu','jenis-les'].forEach(id => {
+        const errMap = { 'jenjang':'err-jenjang','kelas':'err-kelas','waktu':'err-waktu','jenis-les':'err-jenis' };
+        if (!document.getElementById(id).value) { showError(id, errMap[id]); valid = false; }
+        else clearError(id, errMap[id]);
+      });
+
+      /* Radio: jenis kelamin */
+      if (!document.querySelector('input[name="jenis_kelamin"]:checked')) {
+        document.getElementById('opt-gender').classList.add('error-border');
+        document.getElementById('err-gender').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('opt-gender').classList.remove('error-border');
+        document.getElementById('err-gender').classList.remove('show');
+      }
+
+      /* Radio: hubungan */
+      if (!document.querySelector('input[name="hubungan"]:checked')) {
+        document.getElementById('opt-hubungan').classList.add('error-border');
+        document.getElementById('err-hubungan').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('opt-hubungan').classList.remove('error-border');
+        document.getElementById('err-hubungan').classList.remove('show');
+      }
+
+      /* No HP: minimal 10 digit angka */
+      const hp = document.getElementById('no-hp').value.replace(/\D/g, '');
+      if (hp.length < 10) { showError('no-hp', 'err-hp'); valid = false; }
+      else clearError('no-hp', 'err-hp');
+
+      /* Email */
+      const emailVal = document.getElementById('email').value.trim();
+      const emailOk  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+      if (!emailOk) { showError('email', 'err-email'); valid = false; }
+      else          clearError('email', 'err-email');
+
+      /* Checkbox: mata pelajaran */
+      if (!document.querySelector('input[name="mapel"]:checked')) {
+        document.getElementById('opt-mapel').classList.add('error-border');
+        document.getElementById('err-mapel').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('opt-mapel').classList.remove('error-border');
+        document.getElementById('err-mapel').classList.remove('show');
+      }
+
+      /* Checkbox: hari */
+      if (!document.querySelector('input[name="hari"]:checked')) {
+        document.getElementById('opt-hari').classList.add('error-border');
+        document.getElementById('err-hari').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('opt-hari').classList.remove('error-border');
+        document.getElementById('err-hari').classList.remove('show');
+      }
+
+      /* File foto */
+      if (!validateFoto()) valid = false;
+
+      /* Password */
+      const pw  = document.getElementById('password').value;
+      const pw2 = document.getElementById('konfirmasi-password').value;
+      if (pw.length < 6) { showError('password', 'err-password'); valid = false; }
+      else clearError('password', 'err-password');
+      if (pw !== pw2 || pw2 === '') { showError('konfirmasi-password', 'err-konfirmasi'); valid = false; }
+      else clearError('konfirmasi-password', 'err-konfirmasi');
+
+      /* Jika ada error, scroll ke error pertama */
+      if (!valid) {
+        const firstError = document.querySelector('.error-msg.show, .error');
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      /* Kirim ke backend */
+      const formData = new FormData(this);
+      const btn = document.querySelector('.btn-submit');
+      btn.textContent = 'Mengirim...';
+      btn.disabled = true;
+
+      try {
+        const res  = await fetch('/api/daftar', { method: 'POST', body: formData });
+        const json = await res.json();
+        if (json.success) {
+          document.getElementById('tampil-username').textContent = json.username;
+          document.getElementById('modal-sukses').classList.add('show');
+          this.reset();
+          document.getElementById('durasi-val').textContent = '2 jam';
+          document.getElementById('kelas').innerHTML = '<option value="">— Pilih Jenjang Dulu —</option>';
+
+          setTimeout(() => { window.location.href = 'login.html'; }, 7000);
+        } else {
+          alert('Gagal mendaftar: ' + json.message);
+        }
+      } catch (e) {
+        alert('Koneksi ke server gagal. Pastikan server berjalan.');
+      } finally {
+        btn.textContent = 'Kirim Pendaftaran';
+        btn.disabled = false;
+      }
+    });
+
+    function tutupModal() {
+      document.getElementById('modal-sukses').classList.remove('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

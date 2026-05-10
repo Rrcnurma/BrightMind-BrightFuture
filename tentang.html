@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tentang Kami — BrightMind BrightFuture</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { margin: 0; padding: 0; }
+
+    .tentang-hero {
+      background: linear-gradient(135deg, #2d0a5e 0%, #6a1b9a 50%, #ad1457 100%);
+      color: white;
+      padding: 0 48px 60px;
+    }
+
+    .tentang-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 18px;
+      margin-bottom: 60px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .tentang-nav .logo {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: white;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .tentang-nav .logo span { color: #f48fb1; }
+
+    .tentang-nav .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .tentang-nav a.nav-link {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.88rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .tentang-nav a.nav-link:hover { opacity: 0.65; }
+
+    .tentang-nav a.btn-login {
+      color: #2d0a5e;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      background: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .tentang-nav a.btn-login:hover { background: #f3e5f5; }
+
+    .hero-text {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .hero-text .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 99px;
+      margin-bottom: 16px;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 14px;
+    }
+
+    .hero-text h1 span { color: #f48fb1; }
+
+    .hero-text p {
+      font-size: 1rem;
+      opacity: 0.85;
+      line-height: 1.7;
+    }
+
+    /* Konten */
+    .content-section {
+      padding: 60px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #7b1fa2;
+      margin-bottom: 20px;
+    }
+
+    .content-section h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d0a5e;
+      margin-bottom: 16px;
+    }
+
+    .content-section p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    /* Visi Misi */
+    .visi-misi {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 48px 0;
+      padding: 0 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .vm-card {
+      border-radius: 16px;
+      padding: 28px;
+    }
+
+    .vm-card.visi { background: #f3e5f5; }
+    .vm-card.misi { background: #e8eaf6; }
+
+    .vm-card .icon { font-size: 2rem; margin-bottom: 12px; }
+
+    .vm-card h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #2d0a5e;
+      margin-bottom: 10px;
+    }
+
+    .vm-card p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .vm-card ul {
+      padding-left: 18px;
+      font-size: 0.88rem;
+      color: #555;
+      line-height: 1.9;
+    }
+
+    /* Tim */
+    .tim-section {
+      background: #f9f4ff;
+      padding: 60px 48px;
+    }
+
+    .tim-section .inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .tim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .tim-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .tim-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6a1b9a, #ad1457);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 14px;
+    }
+
+    .tim-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2d0a5e;
+      margin-bottom: 4px;
+    }
+
+    .tim-card p {
+      font-size: 0.8rem;
+      color: #7b1fa2;
+      font-weight: 600;
+    }
+
+    /* Statistik */
+    .stats-strip {
+      background: linear-gradient(135deg, #2d0a5e 0%, #6a1b9a 100%);
+      padding: 48px;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item { text-align: center; color: white; }
+
+    .stat-item .number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f48fb1;
+    }
+
+    .stat-item .label {
+      font-size: 0.82rem;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 60px 48px;
+      background: white;
+    }
+
+    .cta-section h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d0a5e;
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #6a1b9a, #ad1457);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 14px 36px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.78rem;
+      color: #999;
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 600px) {
+      .tentang-hero, .content-section, .tim-section, .cta-section { padding-left: 20px; padding-right: 20px; }
+      .visi-misi { grid-template-columns: 1fr; padding: 0 20px; }
+      .stats-strip { gap: 32px; padding: 40px 20px; }
+      .tentang-nav { padding-left: 0; padding-right: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <div class="tentang-hero">
+    <nav class="tentang-nav">
+      <a href="index.html" class="logo">BrightMind <span>BrightFuture</span></a>
+      <div class="nav-links">
+        <a href="tentang.html" class="nav-link" style="border-bottom:1px solid rgba(255,255,255,0.5); padding-bottom:2px;">Tentang Kami</a>
+        <a href="login.html" class="btn-login">Login</a>
+      </div>
+    </nav>
+
+    <div class="hero-text">
+      <div class="badge">🏫 Mengenal Kami Lebih Dekat</div>
+      <h1>Kami hadir untuk <span>masa depan cerah</span> putra-putri Anda</h1>
+      <p>BrightMind BrightFuture adalah lembaga bimbingan belajar privat terpercaya yang berdedikasi membantu siswa SD, SMP, dan SMA meraih prestasi terbaik mereka.</p>
+    </div>
+  </div>
+
+  <!-- STATISTIK -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="number">500+</div>
+      <div class="label">Siswa Aktif</div>
+    </div>
+    <div class="stat-item">
+      <div class="number">50+</div>
+      <div class="label">Tutor Bersertifikat</div>
+    </div>
+    <div class="stat-item">
+      <div class="number">98%</div>
+      <div class="label">Tingkat Kepuasan</div>
+    </div>
+    <div class="stat-item">
+      <div class="number">5+</div>
+      <div class="label">Tahun Pengalaman</div>
+    </div>
+  </div>
+
+  <!-- TENTANG -->
+  <div class="content-section">
+    <p class="section-label">Siapa Kami</p>
+    <h2>Bimbingan belajar yang benar-benar peduli</h2>
+    <p>BrightMind BrightFuture didirikan dengan satu tujuan sederhana: memastikan setiap anak mendapatkan perhatian belajar yang personal dan berkualitas. Kami percaya bahwa setiap siswa memiliki potensi luar biasa yang hanya perlu didampingi dengan cara yang tepat.</p>
+    <p>Berlokasi di Semarang, kami menyediakan layanan les privat untuk mata pelajaran SD, SMP, dan SMA dengan metode pengajaran yang menyenangkan, efektif, dan terstruktur. Tutor kami dipilih secara ketat dan dilatih untuk memberikan pengalaman belajar terbaik bagi setiap siswa.</p>
+  </div>
+
+  <!-- VISI MISI -->
+  <div class="visi-misi">
+    <div class="vm-card visi">
+      <div class="icon">🎯</div>
+      <h3>Visi</h3>
+      <p>Menjadi lembaga bimbingan belajar privat terdepan di Semarang yang melahirkan generasi berprestasi dan berkarakter unggul.</p>
+    </div>
+    <div class="vm-card misi">
+      <div class="icon">🚀</div>
+      <h3>Misi</h3>
+      <ul>
+        <li>Menyediakan tutor berkualitas dan bersertifikat</li>
+        <li>Memberikan pembelajaran yang personal dan efektif</li>
+        <li>Membangun kepercayaan diri setiap siswa</li>
+        <li>Melibatkan orang tua dalam proses belajar</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TIM -->
+  <div class="tim-section">
+    <div class="inner">
+      <p class="section-label">Tim Kami</p>
+      <h2 style="font-size:1.5rem; font-weight:800; color:#2d0a5e; margin-bottom:8px;">Tutor profesional & berdedikasi</h2>
+      <p style="color:#555; font-size:0.95rem;">Setiap tutor kami lulus seleksi ketat dan memiliki rekam jejak mengajar yang terbukti.</p>
+      <div class="tim-grid">
+        <div class="tim-card">
+          <div class="tim-avatar">👩‍🏫</div>
+          <h4>Tim Matematika & IPA</h4>
+          <p>Lulusan teknik & sains terbaik</p>
+        </div>
+        <div class="tim-card">
+          <div class="tim-avatar">👨‍💻</div>
+          <h4>Tim Bahasa Inggris</h4>
+          <p>Bersertifikat TOEFL & IELTS</p>
+        </div>
+        <div class="tim-card">
+          <div class="tim-avatar">👩‍🎓</div>
+          <h4>Tim IPS & Bahasa Indonesia</h4>
+          <p>Pendidik berpengalaman 5+ tahun</p>
+        </div>
+        <div class="tim-card">
+          <div class="tim-avatar">🧑‍🏫</div>
+          <h4>Tim Persiapan Ujian</h4>
+          <p>Spesialis UTBK & ujian nasional</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Siap bergabung bersama kami?</h2>
+    <p>Daftarkan putra-putri Anda sekarang dan rasakan perbedaannya.</p>
+    <a href="index.html#form-section" class="cta-btn">📝 Daftar Sekarang — Gratis!</a>
+  </div>
+
+  <div class="footer">
+    © 2025 BrightMind BrightFuture · Semarang · Semua hak dilindungi
+  </div>
+
+</body>
+</html>
