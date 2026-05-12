@@ -139,7 +139,29 @@
         const res  = await fetch('/api/jadwal');
         const json = await res.json();
         // Hanya tampilkan jadwal milik siswa yang sedang login
-        allJadwal = (json.data || []).filter(j => j.id === siswa.id);
+        const dataSiswa = (json.data || []).filter(j => j.id === siswa.id);
+        if (dataSiswa.length === 0) {
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('empty-state').style.display = 'block';
+          return;
+        }
+        const s = dataSiswa[0];
+        // Gunakan field jadwal jika ada, fallback ke mapel+hari lama
+        if (s.jadwal && s.jadwal.length > 0) {
+          allJadwal = s.jadwal.map(j => ({
+            id: s.id,
+            nama: s.nama,
+            jenjang: s.jenjang,
+            kelas: s.kelas,
+            hari: [j.hari],
+            mapel: j.mapel,
+            waktu: s.waktu,
+            jenis: s.jenis,
+            status: s.status
+          }));
+        } else {
+          allJadwal = [s];
+        }
         renderJadwal(allJadwal);
       } catch (e) {
         document.getElementById('loading').textContent = '❌ Gagal memuat jadwal.';

@@ -154,6 +154,7 @@ app.post('/api/daftar', upload.single('foto_siswa'), async (req, res) => {
       alamat: data.alamat || '',
       mapel: Array.isArray(data.mapel) ? data.mapel : [data.mapel].filter(Boolean),
       hari: Array.isArray(data.hari) ? data.hari : [data.hari].filter(Boolean),
+      jadwal: data.jadwal ? JSON.parse(data.jadwal) : [],
       waktu_mulai: data.waktu_mulai || '',
       jenis_les: data.jenis_les || '',
       durasi: data.durasi || '',

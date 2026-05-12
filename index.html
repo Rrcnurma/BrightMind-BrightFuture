@@ -400,28 +400,82 @@
         <p class="section">Preferensi Les</p>
 
         <div class="field">
-          <label>Mata Pelajaran <span class="req">*</span></label>
-          <div class="options" id="opt-mapel">
-            <label><input type="checkbox" name="mapel" value="Matematika" /> Matematika</label>
-            <label><input type="checkbox" name="mapel" value="Bahasa Inggris" /> Bahasa Inggris</label>
-            <label><input type="checkbox" name="mapel" value="IPA" /> IPA</label>
-            <label><input type="checkbox" name="mapel" value="IPS" /> IPS</label>
-            <label><input type="checkbox" name="mapel" value="Fisika" /> Fisika</label>
-            <label><input type="checkbox" name="mapel" value="Kimia" /> Kimia</label>
-            <label><input type="checkbox" name="mapel" value="Biologi" /> Biologi</label>
-          </div>
-          <span class="error-msg" id="err-mapel">Pilih minimal satu mata pelajaran.</span>
-        </div>
+          <label>Jadwal Les per Hari <span class="req">*</span></label>
+          <p style="font-size:0.8rem;color:#888;margin-bottom:12px">Centang hari yang tersedia, lalu pilih mata pelajaran untuk hari tersebut.</p>
+          <span class="error-msg" id="err-jadwal" style="margin-bottom:8px;display:block">Pilih minimal satu hari dan mata pelajarannya.</span>
 
-        <div class="field">
-          <label>Hari Tersedia <span class="req">*</span></label>
-          <div class="options" id="opt-hari">
-            <label><input type="checkbox" name="hari" value="Senin" /> Senin</label>
-            <label><input type="checkbox" name="hari" value="Rabu" /> Rabu</label>
-            <label><input type="checkbox" name="hari" value="Kamis" /> Kamis</label>
-            <label><input type="checkbox" name="hari" value="Sabtu" /> Sabtu</label>
+          <style>
+            .jadwal-row { border:1.5px solid #e0d0f5; border-radius:10px; margin-bottom:10px; overflow:hidden; }
+            .jadwal-hari-label { display:flex; align-items:center; gap:10px; padding:10px 14px; background:#f3e5f5; cursor:pointer; font-weight:700; color:#4a148c; font-size:0.9rem; }
+            .jadwal-hari-label input[type=checkbox] { width:16px; height:16px; cursor:pointer; accent-color:#7b1fa2; }
+            .jadwal-mapel-box { display:none; padding:12px 14px; background:white; flex-wrap:wrap; gap:8px; }
+            .jadwal-mapel-box.open { display:flex; }
+            .jadwal-mapel-box label { display:flex; align-items:center; gap:6px; font-size:0.82rem; background:#f9f4ff; border:1px solid #d1b3f5; padding:5px 12px; border-radius:99px; cursor:pointer; }
+            .jadwal-mapel-box label input { accent-color:#7b1fa2; }
+          </style>
+
+          <div id="jadwal-builder">
+            <div class="jadwal-row">
+              <label class="jadwal-hari-label">
+                <input type="checkbox" name="hari_aktif" value="Senin" onchange="toggleHari(this,'mapel-senin')">
+                📅 Senin
+              </label>
+              <div class="jadwal-mapel-box" id="mapel-senin">
+                <label><input type="checkbox" name="jadwal_senin" value="Matematika"> Matematika</label>
+                <label><input type="checkbox" name="jadwal_senin" value="Bahasa Inggris"> Bahasa Inggris</label>
+                <label><input type="checkbox" name="jadwal_senin" value="IPA"> IPA</label>
+                <label><input type="checkbox" name="jadwal_senin" value="IPS"> IPS</label>
+                <label><input type="checkbox" name="jadwal_senin" value="Fisika"> Fisika</label>
+                <label><input type="checkbox" name="jadwal_senin" value="Kimia"> Kimia</label>
+                <label><input type="checkbox" name="jadwal_senin" value="Biologi"> Biologi</label>
+              </div>
+            </div>
+            <div class="jadwal-row">
+              <label class="jadwal-hari-label">
+                <input type="checkbox" name="hari_aktif" value="Rabu" onchange="toggleHari(this,'mapel-rabu')">
+                📅 Rabu
+              </label>
+              <div class="jadwal-mapel-box" id="mapel-rabu">
+                <label><input type="checkbox" name="jadwal_rabu" value="Matematika"> Matematika</label>
+                <label><input type="checkbox" name="jadwal_rabu" value="Bahasa Inggris"> Bahasa Inggris</label>
+                <label><input type="checkbox" name="jadwal_rabu" value="IPA"> IPA</label>
+                <label><input type="checkbox" name="jadwal_rabu" value="IPS"> IPS</label>
+                <label><input type="checkbox" name="jadwal_rabu" value="Fisika"> Fisika</label>
+                <label><input type="checkbox" name="jadwal_rabu" value="Kimia"> Kimia</label>
+                <label><input type="checkbox" name="jadwal_rabu" value="Biologi"> Biologi</label>
+              </div>
+            </div>
+            <div class="jadwal-row">
+              <label class="jadwal-hari-label">
+                <input type="checkbox" name="hari_aktif" value="Kamis" onchange="toggleHari(this,'mapel-kamis')">
+                📅 Kamis
+              </label>
+              <div class="jadwal-mapel-box" id="mapel-kamis">
+                <label><input type="checkbox" name="jadwal_kamis" value="Matematika"> Matematika</label>
+                <label><input type="checkbox" name="jadwal_kamis" value="Bahasa Inggris"> Bahasa Inggris</label>
+                <label><input type="checkbox" name="jadwal_kamis" value="IPA"> IPA</label>
+                <label><input type="checkbox" name="jadwal_kamis" value="IPS"> IPS</label>
+                <label><input type="checkbox" name="jadwal_kamis" value="Fisika"> Fisika</label>
+                <label><input type="checkbox" name="jadwal_kamis" value="Kimia"> Kimia</label>
+                <label><input type="checkbox" name="jadwal_kamis" value="Biologi"> Biologi</label>
+              </div>
+            </div>
+            <div class="jadwal-row">
+              <label class="jadwal-hari-label">
+                <input type="checkbox" name="hari_aktif" value="Sabtu" onchange="toggleHari(this,'mapel-sabtu')">
+                📅 Sabtu
+              </label>
+              <div class="jadwal-mapel-box" id="mapel-sabtu">
+                <label><input type="checkbox" name="jadwal_sabtu" value="Matematika"> Matematika</label>
+                <label><input type="checkbox" name="jadwal_sabtu" value="Bahasa Inggris"> Bahasa Inggris</label>
+                <label><input type="checkbox" name="jadwal_sabtu" value="IPA"> IPA</label>
+                <label><input type="checkbox" name="jadwal_sabtu" value="IPS"> IPS</label>
+                <label><input type="checkbox" name="jadwal_sabtu" value="Fisika"> Fisika</label>
+                <label><input type="checkbox" name="jadwal_sabtu" value="Kimia"> Kimia</label>
+                <label><input type="checkbox" name="jadwal_sabtu" value="Biologi"> Biologi</label>
+              </div>
+            </div>
           </div>
-          <span class="error-msg" id="err-hari">Pilih minimal satu hari.</span>
         </div>
 
         <div class="row">
@@ -524,6 +578,17 @@
   </div>
 
   <script>
+    /* ── Toggle mapel box saat hari dicentang ── */
+    function toggleHari(checkbox, boxId) {
+      const box = document.getElementById(boxId);
+      if (checkbox.checked) {
+        box.classList.add('open');
+      } else {
+        box.classList.remove('open');
+        box.querySelectorAll('input[type=checkbox]').forEach(c => c.checked = false);
+      }
+    }
+
     /* ── Scroll ke form ── */
     function scrollToForm() {
       document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
@@ -640,24 +705,26 @@
       if (!emailOk) { showError('email', 'err-email'); valid = false; }
       else          clearError('email', 'err-email');
 
-      /* Checkbox: mata pelajaran */
-      if (!document.querySelector('input[name="mapel"]:checked')) {
-        document.getElementById('opt-mapel').classList.add('error-border');
-        document.getElementById('err-mapel').classList.add('show');
+      /* Checkbox: jadwal per hari */
+      const hariAktif = [...document.querySelectorAll('input[name="hari_aktif"]:checked')];
+      if (hariAktif.length === 0) {
+        document.getElementById('err-jadwal').classList.add('show');
         valid = false;
       } else {
-        document.getElementById('opt-mapel').classList.remove('error-border');
-        document.getElementById('err-mapel').classList.remove('show');
-      }
-
-      /* Checkbox: hari */
-      if (!document.querySelector('input[name="hari"]:checked')) {
-        document.getElementById('opt-hari').classList.add('error-border');
-        document.getElementById('err-hari').classList.add('show');
-        valid = false;
-      } else {
-        document.getElementById('opt-hari').classList.remove('error-border');
-        document.getElementById('err-hari').classList.remove('show');
+        // Cek setiap hari aktif punya minimal 1 mapel
+        let jadwalOk = true;
+        hariAktif.forEach(h => {
+          const hari = h.value.toLowerCase();
+          const mapelChecked = document.querySelectorAll(`input[name="jadwal_${hari}"]:checked`);
+          if (mapelChecked.length === 0) jadwalOk = false;
+        });
+        if (!jadwalOk) {
+          document.getElementById('err-jadwal').classList.add('show');
+          document.getElementById('err-jadwal').textContent = 'Setiap hari yang dipilih harus punya minimal 1 mata pelajaran.';
+          valid = false;
+        } else {
+          document.getElementById('err-jadwal').classList.remove('show');
+        }
       }
 
       /* File foto */
@@ -680,6 +747,16 @@
 
       /* Kirim ke backend */
       const formData = new FormData(this);
+
+      // Bangun array jadwal dari hari aktif + mapelnya
+      const jadwal = [];
+      const hariAktifList = [...document.querySelectorAll('input[name="hari_aktif"]:checked')];
+      hariAktifList.forEach(h => {
+        const hari = h.value;
+        const mapelList = [...document.querySelectorAll(`input[name="jadwal_${hari.toLowerCase()}"]:checked`)].map(m => m.value);
+        jadwal.push({ hari, mapel: mapelList });
+      });
+      formData.append('jadwal', JSON.stringify(jadwal));
       const btn = document.querySelector('.btn-submit');
       btn.textContent = 'Mengirim...';
       btn.disabled = true;
