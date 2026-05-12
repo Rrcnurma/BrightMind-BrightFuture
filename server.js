@@ -138,6 +138,14 @@ app.post('/api/daftar', upload.single('foto_siswa'), async (req, res) => {
     }
 
     // Simpan data ke DynamoDB
+    const parsedJadwal = data.jadwal ? JSON.parse(data.jadwal) : [];
+
+    const semuaHari = parsedJadwal.map(j => j.hari);
+
+    const semuaMapel = parsedJadwal.flatMap(j =>
+      Array.isArray(j.mapel) ? j.mapel : [j.mapel]
+    );
+
     const item = {
       id,
       nama_siswa: data.nama_siswa || '',
@@ -152,9 +160,11 @@ app.post('/api/daftar', upload.single('foto_siswa'), async (req, res) => {
       no_hp: data.no_hp || '',
       email: data.email || '',
       alamat: data.alamat || '',
-      mapel: Array.isArray(data.mapel) ? data.mapel : [data.mapel].filter(Boolean),
-      hari: Array.isArray(data.hari) ? data.hari : [data.hari].filter(Boolean),
-      jadwal: data.jadwal ? JSON.parse(data.jadwal) : [],
+
+      mapel: semuaMapel,
+      hari: semuaHari,
+      jadwal: parsedJadwal,
+
       waktu_mulai: data.waktu_mulai || '',
       jenis_les: data.jenis_les || '',
       durasi: data.durasi || '',
