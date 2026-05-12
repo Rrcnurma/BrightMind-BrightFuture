@@ -177,7 +177,8 @@
         ? allJadwal
         : allJadwal.filter(j => {
             const hariArr = Array.isArray(j.hari) ? j.hari : [j.hari];
-            return hariArr.includes(hari);
+            // SESUDAH:
+            return hariArr.map(h => h.toLowerCase()).includes(hari.toLowerCase());
           });
       renderJadwal(filtered);
     }

@@ -257,6 +257,7 @@ app.get('/api/jadwal', async (req, res) => {
       kelas: s.kelas,
       mapel: s.mapel,
       hari: s.hari,
+      jadwal: s.jadwal || [], 
       waktu: s.waktu_mulai,
       jenis: s.jenis_les,
       status: s.status
